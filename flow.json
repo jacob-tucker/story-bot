@@ -1,0 +1,231 @@
+{
+	"contracts": {
+		"AFLNFT": {
+			"source": "./flow/cadence/contracts/AFLNFT.cdc",
+			"aliases": {
+				"mainnet": "8f9231920da9af6d"
+			}
+		},
+		"AllDay": {
+			"source": "./flow/cadence/contracts/AllDay.cdc",
+			"aliases": {
+				"mainnet": "e4cf4bdc1751c65d"
+			}
+		},
+		"Backpack": {
+			"source": "./flow/cadence/contracts/Backpack.cdc",
+			"aliases": {
+				"mainnet": "807c3d470888cc48"
+			}
+		},
+		"ChainzKey": {
+			"source": "./flow/cadence/contracts/ChainzKey.cdc",
+			"aliases": {
+				"mainnet": "ff342b6df9ef019d"
+			}
+		},
+		"EmeraldBotVerifiers": {
+			"source": "./flow/cadence/contracts/EmeraldBotVerifiers.cdc",
+			"aliases": {
+				"mainnet": "129fee333390875e"
+			}
+		},
+		"EmeraldIdentity": {
+			"source": "./flow/cadence/contracts/EmeraldIdentity.cdc",
+			"aliases": {
+				"mainnet": "39e42c67cc851cfb",
+				"testnet": "4d47bf3ce5e4393f"
+			}
+		},
+		"EmeraldIdentityDapper": {
+			"source": "./flow/cadence/contracts/EmeraldIdentityDapper.cdc",
+			"aliases": {
+				"mainnet": "39e42c67cc851cfb",
+				"testnet": "4d47bf3ce5e4393f"
+			}
+		},
+		"EmeraldIdentityLilico": {
+			"source": "./flow/cadence/contracts/EmeraldIdentityLilico.cdc",
+			"aliases": {
+				"mainnet": "39e42c67cc851cfb",
+				"testnet": "4d47bf3ce5e4393f"
+			}
+		},
+		"EmeraldIdentityShadow": {
+			"source": "./flow/cadence/contracts/EmeraldIdentityShadow.cdc",
+			"aliases": {
+				"mainnet": "39e42c67cc851cfb"
+			}
+		},
+		"Emeralds": {
+			"source": "./flow/cadence/contracts/Emeralds.cdc",
+			"aliases": {
+				"mainnet": "5643fd47a29770e7"
+			}
+		},
+		"FIND": {
+			"source": "./flow/cadence/contracts/FIND.cdc",
+			"aliases": {
+				"mainnet": "097bafa4e0b48eef"
+			}
+		},
+		"FLOAT": {
+			"source": "./flow/cadence/contracts/FLOAT.cdc",
+			"aliases": {
+				"mainnet": "2d4c3caffbeab845"
+			}
+		},
+		"FN": {
+			"source": "./flow/cadence/contracts/Flowns.cdc",
+			"aliases": {
+				"mainnet": "233eb012d34b0070"
+			}
+		},
+		"Flovatar": {
+			"source": "./flow/cadence/contracts/Flovatar.cdc",
+			"aliases": {
+				"mainnet": "921ea449dffec68a"
+			}
+		},
+		"FlovatarDustToken": {
+			"source": "./flow/cadence/contracts/FlovatarDustToken.cdc",
+			"aliases": {
+				"testnet": "9392a4a7c3f49a0b",
+				"mainnet": "921ea449dffec68a"
+			}
+		},
+		"VroomToken": {
+			"source": "./flow/cadence/contracts/VroomToken.cdc",
+			"aliases": {
+				"testnet": "b23640d151fd611d",
+				"mainnet": "f887ece39166906e"
+			}
+		},
+		"SloppyStakes": {
+			"source": "./flow/cadence/contracts/SloppyStakes.cdc",
+			"aliases": {
+				"mainnet": "53f389d96fb4ce5e"
+			}
+		},
+		"FlowToken": {
+			"source": "./flow/cadence/contracts/FlowToken.cdc",
+			"aliases": {
+				"mainnet": "1654653399040a61",
+				"testnet": "7e60df042a9c0868"
+			}
+		},
+		"Flunks": {
+			"source": "./flow/cadence/contracts/Flunks.cdc",
+			"aliases": {
+				"mainnet": "807c3d470888cc48"
+			}
+		},
+		"FungibleToken": {
+			"source": "./flow/cadence/contracts/FungibleToken.cdc",
+			"aliases": {
+				"mainnet": "f233dcee88fe0abe",
+				"testnet": "9a0766d93b6608b7"
+			}
+		},
+		"Golazos": {
+			"source": "./flow/cadence/contracts/Golazos.cdc",
+			"aliases": {
+				"mainnet": "87ca73a41bb50ad5"
+			}
+		},
+		"HeroesOfTheFlow": {
+			"source": "./flow/cadence/contracts/HeroesOfTheFlow.cdc",
+			"aliases": {
+				"mainnet": "1dc37ab51a54d83f"
+			}
+		},
+		"MetadataViews": {
+			"source": "./flow/cadence/contracts/MetadataViews.cdc",
+			"aliases": {
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"NFTCatalog": {
+			"source": "./flow/cadence/contracts/NFTCatalog.cdc",
+			"aliases": {
+				"mainnet": "49a7cda3a1eecc29"
+			}
+		},
+		"NonFungibleToken": {
+			"source": "./flow/cadence/contracts/NonFungibleToken.cdc",
+			"aliases": {
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"SwapConfig": {
+			"source": "./flow/cadence/contracts/SwapConfig.cdc",
+			"aliases": {
+				"mainnet": "b78ef7afa52ff906"
+			}
+		},
+		"SwapFactory": {
+			"source": "./flow/cadence/contracts/SwapFactory.cdc",
+			"aliases": {
+				"mainnet": "b063c16cac85dbd1"
+			}
+		},
+		"SwapInterfaces": {
+			"source": "./flow/cadence/contracts/SwapInterfaces.cdc",
+			"aliases": {
+				"mainnet": "b78ef7afa52ff906"
+			}
+		},
+		"TopShot": {
+			"source": "./flow/cadence/contracts/TopShot.cdc",
+			"aliases": {
+				"mainnet": "0b2a3299cc857e29"
+			}
+		},
+		"Toucans": {
+			"source": "./flow/cadence/contracts/Toucans.cdc",
+			"aliases": {
+				"mainnet": "577a3c409c5dcb5e"
+			}
+		},
+		"UFC_NFT": {
+			"source": "./flow/cadence/contracts/UFC_NFT.cdc",
+			"aliases": {
+				"mainnet": "329feb3ab062d289"
+			}
+		},
+		"ViewResolver": {
+			"source": "./flow/cadence/contracts/ViewResolver.cdc",
+			"aliases": {
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		}
+	},
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "c11558f1d4f9edb14cf1adab5e46db9426884f060df182d48c51aaf69d8f9ebf"
+		},
+		"mainnet-account": {
+			"address": "2d1fe5898c850e00",
+			"key": {
+				"type": "file",
+				"location": "mainnet-account.pkey"
+			}
+		},
+		"testnet-account": {
+			"address": "27647381f73625ef",
+			"key": {
+				"type": "file",
+				"location": "testnet-account.pkey"
+			}
+		}
+	}
+}

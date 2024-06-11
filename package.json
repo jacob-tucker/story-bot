@@ -1,0 +1,38 @@
+{
+  "name": "emerald-bot",
+  "version": "1.0.0",
+  "engines": {
+    "node": "16.15.0"
+  },
+  "description": "",
+  "main": "main.ts",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "dev": "npx nodemon",
+    "start": "npx ts-node ./main.ts"
+  },
+  "author": "Jacob Tucker",
+  "license": "ISC",
+  "dependencies": {
+    "@onflow/fcl": "^1.6.0",
+    "@supabase/supabase-js": "^2.38.4",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.0.0",
+    "elliptic": "^6.5.4",
+    "exif-parser": "^0.1.12",
+    "express": "^4.17.3",
+    "fs": "^0.0.1-security",
+    "node-schedule": "^2.1.0",
+    "path": "^0.12.7",
+    "scrypt-async": "^2.0.1",
+    "sha3": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
