@@ -1,14 +1,7 @@
 require("dotenv").config();
-import path from "path";
-import fs from "fs";
-import {
-  ApplicationCommandType,
-  Client,
-  Collection,
-  GatewayIntentBits,
-  Partials,
-} from "discord.js";
+import { Client, GatewayIntentBits, Partials } from "discord.js";
 import express from "express";
+import { register } from "./lib/functions/register";
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -39,8 +32,7 @@ const TARGET_EMOJI_ID = "1210162862824095744"; // Replace with the emoji you wan
 
 client.on("messageReactionAdd", async (reaction, user) => {
   // Ignore bot reactions
-  // if (user.bot) return;
-  console.log(reaction);
+  if (user.bot) return;
 
   // Check if the reaction emoji matches the target emoji
   if (reaction.emoji.id === TARGET_EMOJI_ID) {
@@ -49,11 +41,14 @@ client.on("messageReactionAdd", async (reaction, user) => {
 
     // Check if the message has an attachment
     if (reaction.message.attachments.size > 0) {
-      reaction.message.attachments.forEach((attachment) => {
+      reaction.message.attachments.forEach(async (attachment) => {
         console.log(
-          `User ${user.tag} reacted to a message with image URL: ${attachment.proxyURL}`
+          `User ${user.tag} reacted to a message with image URL: ${attachment.url}`
         );
-        // You can also send a message or take other actions here
+        const ipId = await register(attachment.url);
+        reaction.message.channel.send(
+          `The image has been registered on Story: https://explorer.storyprotocol.xyz/ipa/${ipId}`
+        );
       });
     } else {
       console.log(
