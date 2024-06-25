@@ -1,7 +1,16 @@
-require("dotenv").config();
-import { Client, GatewayIntentBits, Partials } from "discord.js";
+import {
+  Client,
+  GatewayIntentBits,
+  Partials,
+  Collection,
+  CommandInteraction,
+} from "discord.js";
 import express from "express";
 import { register } from "./lib/functions/register";
+import fs from "fs";
+import dotenv from "dotenv";
+import { Command } from "./types/types";
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -22,10 +31,38 @@ const client = new Client({
     Partials.User,
     Partials.ThreadMember,
   ],
-});
+}) as Client & { commands: Collection<string, Command> };
+
+client.commands = new Collection();
+const commandFiles = fs
+  .readdirSync("./commands")
+  .filter((file) => file.endsWith(".ts"));
+
+for (const file of commandFiles) {
+  const command = require(`./commands/${file}`).default;
+  client.commands.set(command.data.name, command);
+}
 
 client.once("ready", () => {
   console.log("Story bot is online!");
+});
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  const command = client.commands.get(interaction.commandName);
+
+  if (!command) return;
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({
+      content: "There was an error while executing this command!",
+      ephemeral: true,
+    });
+  }
 });
 
 const TARGET_EMOJI_ID = "1210162862824095744"; // Replace with the emoji you want to listen for
