@@ -1,10 +1,4 @@
-import {
-  Client,
-  GatewayIntentBits,
-  Partials,
-  Collection,
-  CommandInteraction,
-} from "discord.js";
+import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
 import express from "express";
 import { register } from "./lib/functions/register";
 import fs from "fs";

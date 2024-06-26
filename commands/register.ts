@@ -1,9 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, EmbedBuilder } from "discord.js";
 import { Command } from "../types/types";
-import { register } from "../lib/functions/register";
 import { storyLogo } from "../lib/utils/constants";
-import fetch from "node-fetch";
 import { saveIpToDb } from "../lib/functions/saveIpToDb";
 import { fetchDiscordImageHexString } from "../lib/functions/fetchDiscordImageHexString";
 
@@ -13,6 +11,11 @@ const command: Command = {
     .setDescription("Register a file directly on Story.")
     .addAttachmentOption((option) =>
       option.setName("file").setDescription("Upload a file").setRequired(true)
+    )
+    .addStringOption((option) =>
+      option
+        .setName("description")
+        .setDescription("Add a description to your file")
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
     const attachment = interaction.options.get("file")?.attachment;

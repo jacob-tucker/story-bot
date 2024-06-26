@@ -35,11 +35,16 @@ const command = {
         );
       }
       const imageAuthor = await fetchDiscordUser(imageData.user_discord_id);
+      if (!imageAuthor) {
+        return await interaction.editReply(
+          "Could not find details about the Discord creator."
+        );
+      }
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
           name: imageAuthor.username,
-          iconURL: imageAuthor.avatarURL(),
+          iconURL: imageAuthor.avatarURL as unknown as string,
         })
         .setTitle("Image data found!")
         .setDescription("View all of the image data below.")
