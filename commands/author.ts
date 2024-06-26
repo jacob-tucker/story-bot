@@ -44,7 +44,7 @@ const command = {
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
           name: imageAuthor.username,
-          iconURL: imageAuthor.avatarURL as unknown as string,
+          iconURL: imageAuthor.avatarURL(),
         })
         .setTitle("Image data found!")
         .setDescription("View all of the image data below.")

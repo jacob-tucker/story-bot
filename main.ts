@@ -1,31 +1,13 @@
-import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
+import { Collection } from "discord.js";
 import express from "express";
 import { register } from "./lib/functions/register";
 import fs from "fs";
 import dotenv from "dotenv";
-import { Command } from "./types/types";
+import { client } from "./lib/bot";
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5001;
-
-export const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.MessageContent,
-  ],
-  partials: [
-    Partials.Channel,
-    Partials.GuildMember,
-    Partials.GuildScheduledEvent,
-    Partials.Message,
-    Partials.Reaction,
-    Partials.User,
-    Partials.ThreadMember,
-  ],
-}) as Client & { commands: Collection<string, Command> };
 
 client.commands = new Collection();
 const commandFiles = fs
@@ -90,7 +72,3 @@ client.on("messageReactionAdd", async (reaction, user) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
-// This is the bot's token
-// Must be at the bottom of the file
-client.login(process.env.TOKEN);

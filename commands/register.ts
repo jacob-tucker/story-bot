@@ -19,7 +19,6 @@ const command: Command = {
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
     const attachment = interaction.options.get("file")?.attachment;
-    console.log(attachment);
 
     const hexString = await fetchDiscordImageHexString(attachment.url);
     if (!hexString) {

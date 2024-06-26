@@ -12,11 +12,10 @@ export async function fetchImageFromHex(
   hexString: string
 ): Promise<ImageIp | null> {
   const s = await shortenHexString(hexString);
-  const { data, error } = await supabaseClient
+  const { data } = await supabaseClient
     .from("images")
     .select()
     .eq("image_hex", s);
-  console.log(error);
   if (!data || !data.length) {
     return null;
   }
