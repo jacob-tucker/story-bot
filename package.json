@@ -9,7 +9,7 @@
   "scripts": {
     "client": "cd client && yarn start",
     "dev": "npx nodemon",
-    "start": "npx ts-node ./deploy-commands.ts && npx ts-node ./main.ts",
+    "start": "npx ts-node ./main.ts",
     "deploy": "npx ts-node ./deploy-commands.ts"
   },
   "author": "Jacob Tucker",
