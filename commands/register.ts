@@ -19,6 +19,8 @@ import { adminAccount, adminClient } from "../lib/utils/storyClient";
 import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDiscordWallet";
 import { saveUserDiscordWallet } from "../lib/functions/supabase/saveUserDiscordWallet";
 import { uploadAndMintAndRegister } from "../lib/functions/uploadAndMintAndRegister";
+import { fetchImageFromHex } from "../lib/functions/supabase/fetchImageFromHex";
+import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -34,7 +36,7 @@ const command: Command = {
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
     const attachment = interaction.options.get("file")?.attachment;
-    console.log(interaction.options.get("description"));
+    await interaction.deferReply({ ephemeral: true });
 
     const hexString = await fetchDiscordImageHexString(attachment.url);
     if (!hexString) {
@@ -43,7 +45,45 @@ const command: Command = {
       });
     }
 
-    await interaction.deferReply({ ephemeral: true });
+    // check if this was already registered
+    const imageFromHex = await fetchImageFromHex(hexString);
+    if (imageFromHex) {
+      let fields: { name: string; value: string; inline: boolean }[] = [
+        { name: "IP ID", value: imageFromHex.ip_id, inline: true },
+      ];
+      if (imageFromHex.description) {
+        fields.push({
+          name: "Description",
+          value: imageFromHex.description,
+          inline: true,
+        });
+      }
+      const imageAuthor = await fetchDiscordUser(imageFromHex.user_discord_id);
+      const embed = new EmbedBuilder()
+        .setColor("#FF0000") // Set the color of the embed
+        .setAuthor({
+          name: imageAuthor.username,
+          iconURL: imageAuthor.avatarURL(),
+        })
+        .setTitle("File Already Registered!")
+        .setURL(`https://explorer.storyprotocol.xyz/ipa/${imageFromHex.ip_id}`)
+        .setDescription("Below are some details related to this IP.")
+        .addFields(fields)
+        .setTimestamp()
+        .setThumbnail(attachment.url)
+        .setFooter({
+          text: "Story Protocol",
+          iconURL: storyLogo,
+        });
+
+      await interaction.editReply({
+        content:
+          "Hey, this image is already registered! You cannot register someone else's image. If this was your image and someone stole it, let us know!",
+        embeds: [embed],
+      });
+      return;
+    }
+
     try {
       await interaction.editReply({
         content: `Registering your file on Story. Please wait ~20 seconds...`,
