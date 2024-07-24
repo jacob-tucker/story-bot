@@ -1,9 +1,24 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, EmbedBuilder } from "discord.js";
 import { Command } from "../types/types";
-import { storyLogo } from "../lib/utils/constants";
+import {
+  ipAssetRegistryContractAddress,
+  nftContractAddress,
+  storyLogo,
+} from "../lib/utils/constants";
 import { saveIpToDb } from "../lib/functions/saveIpToDb";
 import { fetchDiscordImageHexString } from "../lib/functions/fetchDiscordImageHexString";
+import { ethers } from "ethers";
+import { Account, Address, toHex, zeroAddress } from "viem";
+import { AccessPermission } from "@story-protocol/core-sdk";
+import { ipAssetRegistryAbi } from "../lib/utils/ipAssetRegistryAbi";
+import { publicClient } from "../lib/utils/publicClient";
+import { uploadJSONToIPFS } from "../lib/functions/pinata/uploadJSONToIPFS";
+import { mintNFT } from "../lib/functions/mintNFT";
+import { adminAccount, adminClient } from "../lib/utils/storyClient";
+import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDiscordWallet";
+import { saveUserDiscordWallet } from "../lib/functions/supabase/saveUserDiscordWallet";
+import { uploadAndMintAndRegister } from "../lib/functions/uploadAndMintAndRegister";
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -19,6 +34,7 @@ const command: Command = {
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
     const attachment = interaction.options.get("file")?.attachment;
+    console.log(interaction.options.get("description"));
 
     const hexString = await fetchDiscordImageHexString(attachment.url);
     if (!hexString) {
@@ -32,9 +48,61 @@ const command: Command = {
       await interaction.editReply({
         content: `Registering your file on Story. Please wait ~20 seconds...`,
       });
-      // const ipId = await register(attachment.url);
-      const ipId = "10";
-      await saveIpToDb(interaction.user.id, hexString, ipId);
+
+      let userDiscordWallet = await fetchUserDiscordWallet(interaction.user.id);
+      if (!userDiscordWallet) {
+        // create wallet
+        const randomWallet = ethers.Wallet.createRandom();
+        userDiscordWallet = {
+          wallet_address: randomWallet.address as Address,
+          discord_id: interaction.user.id,
+          private_key: randomWallet.privateKey,
+        };
+        await saveUserDiscordWallet(userDiscordWallet);
+      }
+
+      const ipId = await uploadAndMintAndRegister(
+        attachment.url,
+        userDiscordWallet.wallet_address
+      );
+
+      // set all permissions using signature (executeWithSig)
+      // try {
+      //   const setPermissionResponse =
+      //     await adminClient.permission.createSetPermissionSignature({
+      //       ipId,
+      //       signer: adminAccount.address,
+      //       to: zeroAddress,
+      //       permission: AccessPermission.ALLOW,
+      //       txOptions: {
+      //         waitForTransaction: true,
+      //       },
+      //     });
+
+      //   console.log({ setPermissionResponse });
+      // } catch (e) {
+      //   console.log(e);
+      // }
+
+      const description = interaction.options.get("description")?.value as
+        | string
+        | undefined;
+      await saveIpToDb({
+        userDiscordId: interaction.user.id,
+        imageHex: hexString,
+        ipId,
+        description,
+      });
+      let fields: { name: string; value: string; inline: boolean }[] = [
+        { name: "IP ID", value: ipId, inline: true },
+      ];
+      if (description) {
+        fields.push({
+          name: "Description",
+          value: description,
+          inline: true,
+        });
+      }
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
@@ -44,7 +112,7 @@ const command: Command = {
         .setTitle("File Registered Successfully")
         .setURL(`https://explorer.storyprotocol.xyz/ipa/${ipId}`)
         .setDescription("Your file has been successfully registered on Story.")
-        .addFields([{ name: "IP ID", value: ipId }])
+        .addFields(fields)
         .setTimestamp()
         .setThumbnail(attachment.url)
         .setFooter({

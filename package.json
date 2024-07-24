@@ -24,6 +24,7 @@
     "discord.js": "^14.15.3",
     "dotenv": "^16.0.0",
     "elliptic": "^6.5.4",
+    "ethers": "^5.4.0",
     "exif-parser": "^0.1.12",
     "express": "^4.17.3",
     "fs": "^0.0.1-security",

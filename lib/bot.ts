@@ -1,5 +1,7 @@
 import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 import { Command } from "../types/types";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const client = new Client({
   intents: [

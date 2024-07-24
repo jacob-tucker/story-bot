@@ -4,11 +4,11 @@ import { StoryClient, StoryConfig } from "@story-protocol/core-sdk";
 import { rpcProviderUrl } from "./constants";
 
 const privateKey: Address = `0x${process.env.WALLET_PRIVATE_KEY}`;
-export const account: Account = privateKeyToAccount(privateKey);
+export const adminAccount: Account = privateKeyToAccount(privateKey);
 
 const config: StoryConfig = {
   transport: http(rpcProviderUrl),
-  account: account, // the account object from above
+  account: adminAccount, // the account object from above
   chainId: "sepolia",
 };
-export const client = StoryClient.newClient(config);
+export const adminClient = StoryClient.newClient(config);

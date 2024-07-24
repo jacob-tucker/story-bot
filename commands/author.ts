@@ -7,8 +7,9 @@ import {
 } from "discord.js";
 import { storyLogo } from "../lib/utils/constants";
 import { fetchDiscordImageHexString } from "../lib/functions/fetchDiscordImageHexString";
-import { fetchImageFromHex } from "../lib/functions/fetchImageFromHex";
+import { fetchImageFromHex } from "../lib/functions/supabase/fetchImageFromHex";
 import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
+import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDiscordWallet";
 
 // Message Command
 const command = {
@@ -35,10 +36,32 @@ const command = {
         );
       }
       const imageAuthor = await fetchDiscordUser(imageData.user_discord_id);
+      const authorWallet = await fetchUserDiscordWallet(
+        imageData.user_discord_id
+      );
       if (!imageAuthor) {
         return await interaction.editReply(
           "Could not find details about the Discord creator."
         );
+      }
+      let fields = [
+        {
+          name: "Explorer",
+          value: `[View Data](https://explorer.storyprotocol.xyz/ipa/${imageData.ip_id})`,
+          inline: true,
+        },
+        {
+          name: "Creator Wallet",
+          value: authorWallet.wallet_address,
+          inline: true,
+        },
+      ];
+      if (imageData.description) {
+        fields.push({
+          name: "Description",
+          value: imageData.description,
+          inline: true,
+        });
       }
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
@@ -48,14 +71,7 @@ const command = {
         })
         .setTitle("Image data found!")
         .setDescription("View all of the image data below.")
-        .addFields([
-          { name: "IP ID", value: imageData.ip_id, inline: true },
-          {
-            name: "Explorer",
-            value: `[View Data](https://explorer.storyprotocol.xyz/ipa/${imageData.ip_id})`,
-            inline: true,
-          },
-        ])
+        .addFields(fields)
         .setTimestamp()
         .setThumbnail(attachment.url)
         .setFooter({

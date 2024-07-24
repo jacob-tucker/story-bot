@@ -1,11 +1,11 @@
-import { supabaseClient } from "../database/supabaseClient";
-import { shortenHexString } from "./hashHex";
+import { supabaseClient } from "../../database/supabaseClient";
+import { shortenHexString } from "../hashHex";
 
 interface ImageIp {
   user_discord_id: string;
   image_hex: string;
   ip_id: string;
-  description: string;
+  description: string | null;
 }
 
 export async function fetchImageFromHex(

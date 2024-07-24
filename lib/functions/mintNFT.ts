@@ -1,13 +1,13 @@
 import { Address, createPublicClient, createWalletClient, http } from "viem";
 import { sepolia } from "viem/chains";
-import { account } from "../utils/storyClient";
 import { defaultNftContractAbi } from "../utils/solidity/defaultNftContractAbi";
 import { nftContractAddress, rpcProviderUrl } from "../utils/constants";
+import { adminAccount } from "../utils/storyClient";
 
 export async function mintNFT(to: Address, uri: string) {
   console.log("Minting a new NFT...");
   const walletClient = createWalletClient({
-    account: account,
+    account: adminAccount,
     chain: sepolia,
     transport: http(rpcProviderUrl),
   });
