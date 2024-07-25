@@ -70,7 +70,7 @@ const command: Command = {
         .setColor("#FF0000") // Set the color of the embed
         .setAuthor({
           name: imageAuthor.nickname || imageAuthor.displayName,
-          iconURL: imageAuthor.avatarURL(),
+          iconURL: imageAuthor.displayAvatarURL(),
         })
         .setTitle("File Already Registered!")
         .setURL(`https://explorer.storyprotocol.xyz/ipa/${imageFromHex.ip_id}`)

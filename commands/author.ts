@@ -74,7 +74,7 @@ const command = {
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
           name: imageAuthor.nickname || imageAuthor.displayName,
-          iconURL: imageAuthor.avatarURL(),
+          iconURL: imageAuthor.displayAvatarURL(),
         })
         .setTitle("Image data found!")
         .setDescription(
