@@ -74,7 +74,9 @@ const command = {
           iconURL: imageAuthor.avatarURL(),
         })
         .setTitle("Image data found!")
-        .setDescription("View all of the image data below.")
+        .setDescription(
+          "This image is registered as IP on Story. View all of the IP metadata below."
+        )
         .addFields(fields)
         .setTimestamp()
         .setThumbnail(attachment.url)
