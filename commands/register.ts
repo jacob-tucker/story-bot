@@ -35,6 +35,10 @@ const command: Command = {
         .setDescription("Add a description to your file")
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
+    await interaction.editReply({
+      content: "This command is coming soon... Shhhh :)",
+    });
+    return;
     const attachment = interaction.options.get("file")?.attachment;
     await interaction.deferReply({ ephemeral: true });
 
