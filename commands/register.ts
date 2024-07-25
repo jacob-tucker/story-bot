@@ -66,7 +66,7 @@ const command: Command = {
       const embed = new EmbedBuilder()
         .setColor("#FF0000") // Set the color of the embed
         .setAuthor({
-          name: imageAuthor.username,
+          name: imageAuthor.displayName,
           iconURL: imageAuthor.avatarURL(),
         })
         .setTitle("File Already Registered!")
@@ -150,7 +150,7 @@ const command: Command = {
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
-          name: interaction.user.username,
+          name: interaction.user.displayName,
           iconURL: interaction.user.avatarURL(),
         })
         .setTitle("File Registered Successfully")

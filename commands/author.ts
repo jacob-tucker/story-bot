@@ -70,7 +70,7 @@ const command = {
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
-          name: imageAuthor.username,
+          name: imageAuthor.displayName,
           iconURL: imageAuthor.avatarURL(),
         })
         .setTitle("Image data found!")
