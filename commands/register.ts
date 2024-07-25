@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, EmbedBuilder } from "discord.js";
+import { CommandInteraction, EmbedBuilder, GuildMember } from "discord.js";
 import { Command } from "../types/types";
 import {
   ipAssetRegistryContractAddress,
@@ -62,11 +62,14 @@ const command: Command = {
           inline: true,
         });
       }
-      const imageAuthor = await fetchDiscordUser(imageFromHex.user_discord_id);
+      const imageAuthor = await fetchDiscordUser(
+        imageFromHex.user_discord_id,
+        interaction.guildId
+      );
       const embed = new EmbedBuilder()
         .setColor("#FF0000") // Set the color of the embed
         .setAuthor({
-          name: imageAuthor.displayName,
+          name: imageAuthor.nickname || imageAuthor.displayName,
           iconURL: imageAuthor.avatarURL(),
         })
         .setTitle("File Already Registered!")
@@ -147,11 +150,12 @@ const command: Command = {
           inline: true,
         });
       }
+      const member = interaction.member as GuildMember;
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
-          name: interaction.user.displayName,
-          iconURL: interaction.user.avatarURL(),
+          name: member.nickname || member.displayName,
+          iconURL: member.displayAvatarURL(),
         })
         .setTitle("File Registered Successfully")
         .setURL(`https://explorer.storyprotocol.xyz/ipa/${ipId}`)

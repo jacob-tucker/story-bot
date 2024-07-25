@@ -39,7 +39,10 @@ const command = {
           "This image is not registered on Story, so we do not know any attribution data."
         );
       }
-      const imageAuthor = await fetchDiscordUser(imageData.user_discord_id);
+      const imageAuthor = await fetchDiscordUser(
+        imageData.user_discord_id,
+        interaction.guildId
+      );
       const authorWallet = await fetchUserDiscordWallet(
         imageData.user_discord_id
       );
@@ -70,7 +73,7 @@ const command = {
       const embed = new EmbedBuilder()
         .setColor("#efebed") // Set the color of the embed
         .setAuthor({
-          name: imageAuthor.displayName,
+          name: imageAuthor.nickname || imageAuthor.displayName,
           iconURL: imageAuthor.avatarURL(),
         })
         .setTitle("Image data found!")
