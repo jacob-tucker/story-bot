@@ -91,11 +91,13 @@ const command = {
         const member = await interaction.guild.members.fetch(
           interaction.user.id
         );
-        await member.roles.add(ROLE_ID);
-        await interaction.followUp({
-          content: `Congratulations! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
-          ephemeral: true,
-        });
+        if (!member.roles.cache.has(ROLE_ID)) {
+          await member.roles.add(ROLE_ID);
+          await interaction.followUp({
+            content: `Congratulations! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
+            ephemeral: true,
+          });
+        }
       }
     } else {
       await interaction.editReply("This message has no attachments.");
