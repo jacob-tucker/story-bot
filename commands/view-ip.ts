@@ -13,7 +13,7 @@ import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImage
 import { arrayBufferToHex } from "../lib/functions/arrayBufferToHex";
 
 // Define the target ipId and role ID
-const TARGET_IP_ID = "0x40FC38Ff2Ef9D832db7855C65f449Cb2fbD4b23E"; // Replace with the actual target ipId
+const TARGET_IP_ID = "0x8940073726D1853aB4D0C13855aa82F021A2c180"
 const ROLE_ID = "1265879282140577823"; // Replace with the actual role ID to assign
 
 // Message Command
