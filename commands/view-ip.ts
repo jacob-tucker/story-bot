@@ -6,10 +6,11 @@ import {
   TextBasedChannel,
 } from "discord.js";
 import { storyLogo } from "../lib/utils/constants";
-import { fetchDiscordImageHexString } from "../lib/functions/fetchDiscordImageHexString";
 import { fetchImageFromHex } from "../lib/functions/supabase/fetchImageFromHex";
 import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
 import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDiscordWallet";
+import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImageArrayBuffer";
+import { arrayBufferToHex } from "../lib/functions/arrayBufferToHex";
 
 // Define the target ipId and role ID
 const TARGET_IP_ID = "0x40FC38Ff2Ef9D832db7855C65f449Cb2fbD4b23E"; // Replace with the actual target ipId
@@ -18,7 +19,7 @@ const ROLE_ID = "1265879282140577823"; // Replace with the actual role ID to ass
 // Message Command
 const command = {
   data: new ContextMenuCommandBuilder()
-    .setName("Get Author")
+    .setName("View IP")
     .setType(ApplicationCommandType.Message),
   async execute(interaction: ContextMenuCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
@@ -32,8 +33,9 @@ const command = {
     // Checking if the message has attachments
     if (message.attachments.size > 0) {
       const attachment = message.attachments.first();
-      const attachmentHex = await fetchDiscordImageHexString(attachment.url);
-      const imageData = await fetchImageFromHex(attachmentHex);
+      const arrayBuffer = await fetchDiscordImageArrayBuffer(attachment.url);
+      const hashHex = await arrayBufferToHex(arrayBuffer);
+      const imageData = await fetchImageFromHex(hashHex);
       if (!imageData) {
         return await interaction.editReply(
           "This image is not registered on Story, so we do not know any attribution data."

@@ -7,10 +7,9 @@ export async function saveIpToDb(data: {
   ipId: string;
   description: string | undefined;
 }) {
-  const s = await shortenHexString(data.imageHex);
   const { error } = await supabaseClient.from("images").insert({
     user_discord_id: data.userDiscordId,
-    image_hex: s,
+    image_hex: data.imageHex,
     ip_id: data.ipId,
     description: data.description,
   });

@@ -7,7 +7,7 @@ import {
   storyLogo,
 } from "../lib/utils/constants";
 import { saveIpToDb } from "../lib/functions/saveIpToDb";
-import { fetchDiscordImageHexString } from "../lib/functions/fetchDiscordImageHexString";
+import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImageArrayBuffer";
 import { ethers } from "ethers";
 import { Account, Address, toHex, zeroAddress } from "viem";
 import { AccessPermission } from "@story-protocol/core-sdk";
@@ -21,6 +21,8 @@ import { saveUserDiscordWallet } from "../lib/functions/supabase/saveUserDiscord
 import { uploadAndMintAndRegister } from "../lib/functions/uploadAndMintAndRegister";
 import { fetchImageFromHex } from "../lib/functions/supabase/fetchImageFromHex";
 import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
+import { arrayBufferToHex } from "../lib/functions/arrayBufferToHex";
+import { arrayBufferToPerceptualHash } from "../lib/functions/arrayBufferToPerceptualHash";
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -42,15 +44,18 @@ const command: Command = {
     const attachment = interaction.options.get("file")?.attachment;
     await interaction.deferReply({ ephemeral: true });
 
-    const hexString = await fetchDiscordImageHexString(attachment.url);
-    if (!hexString) {
+    const arrayBuffer = await fetchDiscordImageArrayBuffer(attachment.url);
+    if (!arrayBuffer) {
       await interaction.editReply({
         content: `There was an error downloading the file.`,
       });
     }
 
+    const hashHex = await arrayBufferToHex(arrayBuffer);
+    // const pHash = await arrayBufferToPerceptualHash(arrayBuffer);
+
     // check if this was already registered
-    const imageFromHex = await fetchImageFromHex(hexString);
+    const imageFromHex = await fetchImageFromHex(hashHex);
     if (imageFromHex) {
       let fields: { name: string; value: string; inline: boolean }[] = [
         { name: "IP ID", value: imageFromHex.ip_id, inline: true },
@@ -136,7 +141,7 @@ const command: Command = {
         | undefined;
       await saveIpToDb({
         userDiscordId: interaction.user.id,
-        imageHex: hexString,
+        imageHex: hashHex,
         ipId,
         description,
       });

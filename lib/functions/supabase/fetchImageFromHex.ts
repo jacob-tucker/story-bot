@@ -1,5 +1,4 @@
 import { supabaseClient } from "../../database/supabaseClient";
-import { shortenHexString } from "../hashHex";
 
 interface ImageIp {
   user_discord_id: string;
@@ -11,11 +10,10 @@ interface ImageIp {
 export async function fetchImageFromHex(
   hexString: string
 ): Promise<ImageIp | null> {
-  const s = await shortenHexString(hexString);
   const { data } = await supabaseClient
     .from("images")
     .select()
-    .eq("image_hex", s);
+    .eq("image_hex", hexString);
   if (!data || !data.length) {
     return null;
   }

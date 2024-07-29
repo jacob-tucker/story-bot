@@ -1,14 +1,13 @@
-export async function fetchDiscordImageHexString(
+export async function fetchDiscordImageArrayBuffer(
   attachmentUrl: string
-): Promise<string | null> {
+): Promise<ArrayBuffer | null> {
   try {
     const response = await fetch(attachmentUrl);
     if (!response.ok) {
       throw new Error(`Failed to fetch ${response.statusText}`);
     }
     const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    return buffer.toString("hex");
+    return arrayBuffer;
   } catch (error) {
     console.error("Error downloading file:", error);
     return null;
