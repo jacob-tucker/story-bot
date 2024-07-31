@@ -13,7 +13,7 @@ import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImage
 import { arrayBufferToHex } from "../lib/functions/arrayBufferToHex";
 
 // Define the target ipId and role ID
-const TARGET_IP_ID = "0x8940073726D1853aB4D0C13855aa82F021A2c180"
+const TARGET_IP_ID = "0x8940073726D1853aB4D0C13855aa82F021A2c180";
 const ROLE_ID = "1265879282140577823"; // Replace with the actual role ID to assign
 
 // Message Command
@@ -99,11 +99,15 @@ const command = {
           interaction.user.id
         );
         if (!member.roles.cache.has(ROLE_ID)) {
-          await member.roles.add(ROLE_ID);
-          await interaction.followUp({
-            content: `Congratulations! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
-            ephemeral: true,
-          });
+          try {
+            await member.roles.add(ROLE_ID);
+            await interaction.followUp({
+              content: `Congratulations! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
+              ephemeral: true,
+            });
+          } catch (e) {
+            console.log(e);
+          }
         }
       }
     } else {
