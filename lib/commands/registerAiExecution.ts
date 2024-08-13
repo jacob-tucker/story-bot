@@ -1,71 +1,72 @@
 import { CommandInteraction, EmbedBuilder, GuildMember } from "discord.js";
-import { fetchDiscordImageArrayBuffer } from "../functions/fetchDiscordImageArrayBuffer";
 import { arrayBufferToHex } from "../functions/arrayBufferToHex";
-import { fetchDiscordUser } from "../functions/fetchDiscordUser";
 import { storyLogo } from "../utils/constants";
 import { fetchUserDiscordWallet } from "../functions/supabase/fetchUserDiscordWallet";
 import { ethers } from "ethers";
 import { Address } from "viem";
 import { saveUserDiscordWallet } from "../functions/supabase/saveUserDiscordWallet";
-import { uploadAndMintAndRegister } from "../functions/uploadAndMintAndRegister";
+import { uploadAndMintAndRegister } from "../functions/story/uploadAndMintAndRegister";
 import { saveIpToDb } from "../functions/saveIpToDb";
+import { generateImage } from "../functions/stability/generateImage";
+import { uploadImageToSupabase } from "../functions/supabase/uploadImageToSupabase";
+import { convertStringToFileName } from "../functions/convertStringToFileName";
+import { getImagePublicUrl } from "../functions/supabase/getImagePublicUrl";
+import { fileExistsInBucket } from "../functions/supabase/fileExistsInBucket";
 import { calculatePerceptualHash } from "../functions/calculatePerceptualHash";
-import { fetchImageFromPHash } from "../functions/supabase/fetchImageFromPHash";
 
-export async function registerCustom(interaction: CommandInteraction) {
-  const attachment = interaction.options.get("file")?.attachment;
+export async function registerAiExecution(interaction: CommandInteraction) {
+  const prompt = interaction.options.get("prompt").value as string;
   const name = interaction.options.get("name").value as string;
 
-  const arrayBuffer = await fetchDiscordImageArrayBuffer(attachment.url);
-  if (!arrayBuffer) {
-    await interaction.editReply({
-      content: `There was an error downloading the file.`,
+  await interaction.editReply({
+    content: `Generating your image using Stability AI. Please wait ~20 seconds...`,
+  });
+
+  const fileExists = await fileExistsInBucket(
+    "ai_generated_images",
+    interaction.user.id,
+    convertStringToFileName(name)
+  );
+
+  if (fileExists) {
+    return await interaction.editReply({
+      content: `You have already generated an image using the name '${name}'. Please use a different name!`,
     });
   }
 
+  const imageBlob = await generateImage(prompt);
+  if (!imageBlob) {
+    return await interaction.editReply({
+      content: `There was an error generating your image. Please contract the Story team for further help.`,
+    });
+  }
+
+  const { data, errorMessage } = await uploadImageToSupabase(
+    "ai_generated_images",
+    interaction.user.id,
+    convertStringToFileName(name),
+    imageBlob
+  );
+  if (errorMessage) {
+    return await interaction.editReply({
+      content: `There was an error generating & storing your image: "${errorMessage}". Please contact the Story team for further help.`,
+    });
+  }
+
+  const arrayBuffer = await imageBlob.arrayBuffer();
   const hashHex = await arrayBufferToHex(arrayBuffer);
   const pHash = await calculatePerceptualHash(arrayBuffer);
 
-  // check if this was already registered
-  const imageFromPHash = await fetchImageFromPHash(pHash);
-  if (imageFromPHash) {
-    let fields: { name: string; value: string; inline: boolean }[] = [
-      { name: "IP ID", value: imageFromPHash.ip_id, inline: true },
-    ];
-    if (imageFromPHash.description) {
-      fields.push({
-        name: "Description",
-        value: imageFromPHash.description,
-        inline: true,
-      });
-    }
-    const imageAuthor = await fetchDiscordUser(
-      imageFromPHash.user_discord_id,
-      interaction.guildId
-    );
-    const embed = new EmbedBuilder()
-      .setColor("#FF0000") // Set the color of the embed
-      .setAuthor({
-        name: imageAuthor.nickname || imageAuthor.displayName,
-        iconURL: imageAuthor.displayAvatarURL(),
-      })
-      .setTitle("File Already Registered!")
-      .setURL(`https://explorer.storyprotocol.xyz/ipa/${imageFromPHash.ip_id}`)
-      .setDescription("Below are some details related to this IP.")
-      .addFields(fields)
-      .setTimestamp()
-      .setThumbnail(attachment.url)
-      .setFooter({
-        text: "Story Protocol",
-        iconURL: storyLogo,
-      });
-
-    await interaction.editReply({
-      content:
-        "Hey, this image is already registered! You cannot register someone else's image. If this was your image and someone stole it, let us know!",
-      embeds: [embed],
+  //   const imageIPFSHash = await uploadFileToIPFS(imageBlob);
+  const imageUrl = getImagePublicUrl(
+    "ai_generated_images",
+    interaction.user.id,
+    convertStringToFileName(name)
+  );
+  if (!imageUrl) {
+    return await interaction.editReply({
+      content: `There was an error generating & storing your image. Please contact the Story team.`,
     });
-    return;
   }
 
   try {
@@ -86,7 +87,7 @@ export async function registerCustom(interaction: CommandInteraction) {
     }
 
     const ipId = await uploadAndMintAndRegister(
-      attachment.url,
+      imageUrl,
       userDiscordWallet.wallet_address
     );
 
@@ -108,25 +109,22 @@ export async function registerCustom(interaction: CommandInteraction) {
     //   console.log(e);
     // }
 
-    const description = interaction.options.get("description")?.value as
-      | string
-      | undefined;
     await saveIpToDb({
       userDiscordId: interaction.user.id,
       hash: hashHex,
       pHash,
       ipId,
       name,
-      description,
-      createdWithAi: false,
+      description: prompt,
+      createdWithAi: true,
     });
     let fields: { name: string; value: string; inline: boolean }[] = [
       { name: "IP ID", value: ipId, inline: true },
     ];
-    if (description) {
+    if (prompt) {
       fields.push({
-        name: "Description",
-        value: description,
+        name: "Prompt",
+        value: prompt,
         inline: true,
       });
     }
@@ -142,7 +140,7 @@ export async function registerCustom(interaction: CommandInteraction) {
       .setDescription("Your file has been successfully registered on Story.")
       .addFields(fields)
       .setTimestamp()
-      .setThumbnail(attachment.url)
+      .setThumbnail(imageUrl)
       .setFooter({
         text: "Story Protocol",
         iconURL: storyLogo,

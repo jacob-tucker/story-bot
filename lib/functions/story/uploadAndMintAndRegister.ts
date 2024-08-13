@@ -1,8 +1,8 @@
 import { Address, toHex } from "viem";
-import { adminClient } from "../utils/storyClient";
-import { uploadJSONToIPFS } from "./pinata/uploadJSONToIPFS";
-import { mintNFT } from "./mintNFT";
-import { nftContractAddress } from "../utils/constants";
+import { adminClient } from "../../utils/storyClient";
+import { uploadJSONToIPFS } from "../pinata/uploadJSONToIPFS";
+import { mintNFT } from "../mintNFT";
+import { nftContractAddress } from "../../utils/constants";
 
 export async function uploadAndMintAndRegister(
   imageURL: string,

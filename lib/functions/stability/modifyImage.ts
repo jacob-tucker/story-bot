@@ -2,15 +2,25 @@ import axios from "axios";
 import { base64ToBlob } from "../base64ToBlob";
 import { blobToBuffer } from "../blobToBuffer";
 import sharp from "sharp";
+import { arrayBufferToBuffer } from "../arrayBufferToBuffer";
 
-export async function generateImage(prompt: string) {
+export async function modifyImage(
+  originalAttachmentArrayBuffer: ArrayBuffer,
+  prompt: string,
+  strength: number
+) {
+  const buffer = arrayBufferToBuffer(originalAttachmentArrayBuffer);
+
   const payload = {
+    image: buffer,
     prompt,
+    strength,
     output_format: "jpeg",
+    mode: "image-to-image",
   };
 
   const response = await axios.postForm(
-    `https://api.stability.ai/v2beta/stable-image/generate/core`,
+    `https://api.stability.ai/v2beta/stable-image/generate/sd3`,
     axios.toFormData(payload, new FormData()),
     {
       headers: {

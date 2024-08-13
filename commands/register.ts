@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
 import { Command } from "../types/types";
-import { registerCustom } from "../lib/commands/registerCustom";
-import { registerAi } from "../lib/commands/registerAi";
+import { registerAiExecution } from "../lib/commands/registerAiExecution";
+import { registerCustomExecution } from "../lib/commands/registerCustomExecution";
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -48,17 +48,18 @@ const command: Command = {
         )
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
-    await interaction.editReply({
+    await interaction.reply({
       content: "This command is coming soon... Shhhh :)",
+      ephemeral: true,
     });
     return;
     await interaction.deferReply({ ephemeral: true });
     // @ts-ignore
     const subcommand = interaction.options.getSubcommand();
     if (subcommand === "ai") {
-      await registerAi(interaction);
+      await registerAiExecution(interaction);
     } else if (subcommand === "custom") {
-      await registerCustom(interaction);
+      await registerCustomExecution(interaction);
     } else {
       await interaction.editReply({ content: "Invalid command!" });
     }

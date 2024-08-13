@@ -1,9 +1,8 @@
 import { ContextMenuCommandBuilder } from "@discordjs/builders";
 import {
   ApplicationCommandType,
-  ContextMenuCommandInteraction,
   EmbedBuilder,
-  TextBasedChannel,
+  MessageContextMenuCommandInteraction,
 } from "discord.js";
 import { storyLogo } from "../lib/utils/constants";
 import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
@@ -11,7 +10,6 @@ import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDisco
 import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImageArrayBuffer";
 import { calculatePerceptualHash } from "../lib/functions/calculatePerceptualHash";
 import { fetchImageFromPHash } from "../lib/functions/supabase/fetchImageFromPHash";
-import { findSimilarPHashes } from "../lib/functions/supabase/findSimilarPHashes";
 import { findMostSimilarPHash } from "../lib/functions/supabase/findMostSimilarPHash";
 
 // Define the target ipId and role ID
@@ -23,14 +21,10 @@ const command = {
   data: new ContextMenuCommandBuilder()
     .setName("View IP")
     .setType(ApplicationCommandType.Message),
-  async execute(interaction: ContextMenuCommandInteraction) {
+  async execute(interaction: MessageContextMenuCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
-    // Accessing the message that was right-clicked
-    const channel = (await interaction.guild.channels.fetch(
-      interaction.channelId
-    )) as TextBasedChannel;
-    const message = await channel.messages.fetch(interaction.targetId);
+    const message = interaction.targetMessage;
 
     // Checking if the message has attachments
     if (message.attachments.size > 0) {
@@ -38,16 +32,11 @@ const command = {
       const arrayBuffer = await fetchDiscordImageArrayBuffer(attachment.url);
       const pHash = await calculatePerceptualHash(arrayBuffer);
 
-      let imageData = await fetchImageFromPHash(pHash);
+      const imageData = await fetchImageFromPHash(pHash);
       if (!imageData) {
-        // if no exact match, try to find the most similar
-        const mostSimilarImageData = await findMostSimilarPHash(pHash);
-        if (!mostSimilarImageData) {
-          return await interaction.editReply(
-            "This image is not registered on Story, so we do not know any attribution data."
-          );
-        }
-        imageData = mostSimilarImageData;
+        return await interaction.editReply(
+          "This image is not registered on Story, so we do not know any attribution data."
+        );
       }
       const imageAuthor = await fetchDiscordUser(
         imageData.user_discord_id,

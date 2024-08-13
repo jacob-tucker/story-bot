@@ -3,6 +3,8 @@ import express from "express";
 import fs from "fs";
 import dotenv from "dotenv";
 import { client } from "./lib/bot";
+import { remixExecution } from "./lib/commands/remixExecution";
+import { modalStorage } from "./lib/database/storage";
 dotenv.config();
 
 const app = express();
@@ -23,20 +25,58 @@ client.once("ready", () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
+  if (interaction.isCommand()) {
+    const command = client.commands.get(interaction.commandName);
 
-  const command = client.commands.get(interaction.commandName);
+    if (!command) return;
 
-  if (!command) return;
+    try {
+      await command.execute(interaction);
+    } catch (error) {
+      console.error(error);
+      await interaction.reply({
+        content: "There was an error while executing this command!",
+        ephemeral: true,
+      });
+    }
+  } else if (interaction.isModalSubmit()) {
+    if (interaction.customId === "remixModal") {
+      const name = interaction.fields.getTextInputValue("name");
+      const prompt = interaction.fields.getTextInputValue("prompt");
+      const strengthInput = interaction.fields.getTextInputValue("strength");
+      const strength = parseInt(strengthInput, 10);
+      // Validate that the strength is a number and within the range [0, 100]
+      if (isNaN(strength) || strength < 0 || strength > 100) {
+        await interaction.reply({
+          content:
+            "Invalid strength value. Please enter a number between 0 and 100.",
+          ephemeral: true,
+        });
+        return;
+      }
 
-  try {
-    await command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    await interaction.reply({
-      content: "There was an error while executing this command!",
-      ephemeral: true,
-    });
+      // Retrieve the stored attachment URL
+      const attachmentUrl = modalStorage.get(interaction.user.id);
+
+      if (!attachmentUrl) {
+        await interaction.reply({
+          content: "Failed to retrieve image data. Please try again.",
+          ephemeral: true,
+        });
+        return;
+      }
+
+      await remixExecution(
+        interaction,
+        attachmentUrl,
+        name,
+        prompt,
+        strength / 100
+      );
+
+      // Clean up storage
+      modalStorage.delete(interaction.user.id);
+    }
   }
 });
 
