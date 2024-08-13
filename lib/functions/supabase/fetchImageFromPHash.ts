@@ -7,13 +7,13 @@ interface ImageIp {
   description: string | null;
 }
 
-export async function fetchImageFromHex(
-  hexString: string
+export async function fetchImageFromPHash(
+  pHash: string
 ): Promise<ImageIp | null> {
   const { data } = await supabaseClient
     .from("images")
     .select()
-    .eq("image_hex", hexString);
+    .eq("p_hash", pHash);
   if (!data || !data.length) {
     return null;
   }

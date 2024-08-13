@@ -6,11 +6,11 @@ import {
   TextBasedChannel,
 } from "discord.js";
 import { storyLogo } from "../lib/utils/constants";
-import { fetchImageFromHex } from "../lib/functions/supabase/fetchImageFromHex";
 import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
 import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDiscordWallet";
 import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImageArrayBuffer";
-import { arrayBufferToHex } from "../lib/functions/arrayBufferToHex";
+import { calculatePerceptualHash } from "../lib/functions/calculatePerceptualHash";
+import { fetchImageFromPHash } from "../lib/functions/supabase/fetchImageFromPHash";
 
 // Define the target ipId and role ID
 const TARGET_IP_ID = "0x8940073726D1853aB4D0C13855aa82F021A2c180";
@@ -34,8 +34,10 @@ const command = {
     if (message.attachments.size > 0) {
       const attachment = message.attachments.first();
       const arrayBuffer = await fetchDiscordImageArrayBuffer(attachment.url);
-      const hashHex = await arrayBufferToHex(arrayBuffer);
-      const imageData = await fetchImageFromHex(hashHex);
+      const pHash = await calculatePerceptualHash(arrayBuffer);
+      console.log({ pHash });
+
+      const imageData = await fetchImageFromPHash(pHash);
       if (!imageData) {
         return await interaction.editReply(
           "This image is not registered on Story, so we do not know any attribution data."
