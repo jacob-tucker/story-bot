@@ -22,7 +22,6 @@ const channel = supabaseClient
       table: "user_twitters", // Optional: specify table if needed
     },
     async (payload) => {
-      console.log(payload);
       if (payload.new.twitter_name.includes("꧁IP꧂")) {
         await giveUserRole(
           payload.new.discord_id,
@@ -40,7 +39,6 @@ const channel = supabaseClient
       table: "user_twitters", // Optional: specify table if needed
     },
     async (payload) => {
-      console.log(payload);
       if (payload.new.twitter_name.includes("꧁IP꧂")) {
         await giveUserRole(
           payload.new.discord_id,
