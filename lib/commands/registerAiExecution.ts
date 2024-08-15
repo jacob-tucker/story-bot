@@ -142,7 +142,7 @@ export async function registerAiExecution(interaction: CommandInteraction) {
       .setTimestamp()
       .setThumbnail(imageUrl)
       .setFooter({
-        text: "Story Protocol",
+        text: "Story",
         iconURL: storyLogo,
       });
 

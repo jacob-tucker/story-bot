@@ -83,7 +83,7 @@ const command = {
         .setTimestamp()
         .setThumbnail(attachment.url)
         .setFooter({
-          text: "Story Protocol",
+          text: "Story",
           iconURL: storyLogo,
         });
       await interaction.editReply({

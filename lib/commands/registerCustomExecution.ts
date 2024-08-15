@@ -56,7 +56,7 @@ export async function registerCustomExecution(interaction: CommandInteraction) {
       .setTimestamp()
       .setThumbnail(attachment.url)
       .setFooter({
-        text: "Story Protocol",
+        text: "Story",
         iconURL: storyLogo,
       });
 
@@ -144,7 +144,7 @@ export async function registerCustomExecution(interaction: CommandInteraction) {
       .setTimestamp()
       .setThumbnail(attachment.url)
       .setFooter({
-        text: "Story Protocol",
+        text: "Story",
         iconURL: storyLogo,
       });
 
