@@ -136,7 +136,7 @@ export async function registerAiExecution(interaction: CommandInteraction) {
         iconURL: member.displayAvatarURL(),
       })
       .setTitle("File Registered Successfully")
-      .setURL(`https://explorer.storyprotocol.xyz/ipa/${ipId}`)
+      .setURL(`https://explorer.story.foundation/ipa/${ipId}`)
       .setDescription("Your file has been successfully registered on Story.")
       .addFields(fields)
       .setTimestamp()

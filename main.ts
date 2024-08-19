@@ -99,7 +99,7 @@ const TARGET_EMOJI_ID = "1210162862824095744"; // Replace with the emoji you wan
 //         );
 //         const ipId = await register(attachment.url);
 //         reaction.message.channel.send(
-//           `The image has been registered on Story: https://explorer.storyprotocol.xyz/ipa/${ipId}`
+//           `The image has been registered on Story: https://explorer.story.foundation/ipa/${ipId}`
 //         );
 //       });
 //     } else {

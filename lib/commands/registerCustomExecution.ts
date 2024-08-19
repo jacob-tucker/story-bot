@@ -50,7 +50,7 @@ export async function registerCustomExecution(interaction: CommandInteraction) {
         iconURL: imageAuthor.displayAvatarURL(),
       })
       .setTitle("File Already Registered!")
-      .setURL(`https://explorer.storyprotocol.xyz/ipa/${imageFromPHash.ip_id}`)
+      .setURL(`https://explorer.story.foundation/ipa/${imageFromPHash.ip_id}`)
       .setDescription("Below are some details related to this IP.")
       .addFields(fields)
       .setTimestamp()
@@ -138,7 +138,7 @@ export async function registerCustomExecution(interaction: CommandInteraction) {
         iconURL: member.displayAvatarURL(),
       })
       .setTitle("File Registered Successfully")
-      .setURL(`https://explorer.storyprotocol.xyz/ipa/${ipId}`)
+      .setURL(`https://explorer.story.foundation/ipa/${ipId}`)
       .setDescription("Your file has been successfully registered on Story.")
       .addFields(fields)
       .setTimestamp()

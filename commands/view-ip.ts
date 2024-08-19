@@ -53,7 +53,7 @@ const command = {
       let fields = [
         {
           name: "Explorer",
-          value: `[View Data](https://explorer.storyprotocol.xyz/ipa/${imageData.ip_id})`,
+          value: `[View Data](https://explorer.story.foundation/ipa/${imageData.ip_id})`,
           inline: true,
         },
         {
