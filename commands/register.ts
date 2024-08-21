@@ -50,6 +50,7 @@ const command: Command = {
   async execute(interaction: CommandInteraction) {
     await interaction.reply({
       content: "This command is coming soon... Shhhh :)",
+      ephemeral: true,
     });
     return;
     await interaction.deferReply({ ephemeral: true });

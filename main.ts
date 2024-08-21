@@ -77,34 +77,33 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-const TARGET_EMOJI_ID = "1210162862824095744"; // Replace with the emoji you want to listen for
+const TARGET_EMOJI_ID = "1275837340673380414"; // Replace with the emoji you want to listen for
+const TARGET_MESSAGE_ID = "1275838112681169037";
+const ROLE_ID = "1265879282140577823";
 
-// client.on("messageReactionAdd", async (reaction, user) => {
-//   // Ignore bot reactions
-//   if (user.bot) return;
+client.on("messageReactionAdd", async (reaction, user) => {
+  // Ignore bot reactions
+  if (user.bot) return;
 
-//   // Check if the reaction emoji matches the target emoji
-//   if (reaction.emoji.id === TARGET_EMOJI_ID) {
-//     // Fetch the message if it wasn't cached
-//     if (reaction.message.partial) await reaction.message.fetch();
-
-//     // Check if the message has an attachment
-//     if (reaction.message.attachments.size > 0) {
-//       reaction.message.attachments.forEach(async (attachment) => {
-//         console.log(
-//           `User ${user.tag} reacted to a message with image URL: ${attachment.url}`
-//         );
-//         const ipId = await register(attachment.url);
-//         reaction.message.channel.send(
-//           `The image has been registered on Story: https://explorer.story.foundation/ipa/${ipId}`
-//         );
-//       });
-//     } else {
-//       console.log(
-//         `User ${user.tag} reacted to the message has no attachments.`
-//       );
-//     }
-//   }
-// });
+  // Check if the reaction emoji matches the target emoji
+  if (
+    reaction.emoji.id === TARGET_EMOJI_ID &&
+    reaction.message.id === TARGET_MESSAGE_ID
+  ) {
+    const guild = reaction.message.guild; // Access the guild from the reaction message
+    const member = await guild.members.fetch(user.id); // Fetch the member from the guild
+    if (!member.roles.cache.has(ROLE_ID)) {
+      try {
+        await member.roles.add(ROLE_ID);
+        // Optional: Send a DM to the user or a follow-up message in the channel if needed
+        await user.send({
+          content: `Congratulations! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
