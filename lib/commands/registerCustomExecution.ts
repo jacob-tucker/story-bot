@@ -2,7 +2,7 @@ import { CommandInteraction, EmbedBuilder, GuildMember } from "discord.js";
 import { fetchDiscordImageArrayBuffer } from "../functions/fetchDiscordImageArrayBuffer";
 import { arrayBufferToHex } from "../functions/arrayBufferToHex";
 import { fetchDiscordUser } from "../functions/fetchDiscordUser";
-import { storyLogo } from "../utils/constants";
+import { storyExplorer, storyLogo } from "../utils/constants";
 import { fetchUserDiscordWallet } from "../functions/supabase/fetchUserDiscordWallet";
 import { ethers } from "ethers";
 import { Address } from "viem";
@@ -50,7 +50,7 @@ export async function registerCustomExecution(interaction: CommandInteraction) {
         iconURL: imageAuthor.displayAvatarURL(),
       })
       .setTitle("File Already Registered!")
-      .setURL(`https://explorer.story.foundation/ipa/${imageFromPHash.ip_id}`)
+      .setURL(`${storyExplorer}/ipa/${imageFromPHash.ip_id}`)
       .setDescription("Below are some details related to this IP.")
       .addFields(fields)
       .setTimestamp()
@@ -138,7 +138,7 @@ export async function registerCustomExecution(interaction: CommandInteraction) {
         iconURL: member.displayAvatarURL(),
       })
       .setTitle("File Registered Successfully")
-      .setURL(`https://explorer.story.foundation/ipa/${ipId}`)
+      .setURL(`${storyExplorer}/ipa/${ipId}`)
       .setDescription("Your file has been successfully registered on Story.")
       .addFields(fields)
       .setTimestamp()

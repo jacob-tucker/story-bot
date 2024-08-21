@@ -6,3 +6,5 @@ export const rpcProviderUrl = "https://ethereum-sepolia-rpc.publicnode.com";
 export const storyLogo = "https://i.imgur.com/MvCjBHm.png";
 export const ipAssetRegistryContractAddress =
   "0xd43fE0d865cb5C26b1351d3eAf2E3064BE3276F6";
+
+export const storyExplorer = "https://scan.testnet.storyprotocol.net/";

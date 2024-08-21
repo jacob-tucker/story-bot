@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 import { Address } from "viem";
 import { saveUserDiscordWallet } from "../functions/supabase/saveUserDiscordWallet";
 import { saveIpToDb } from "../functions/saveIpToDb";
-import { storyLogo } from "../utils/constants";
+import { storyExplorer, storyLogo } from "../utils/constants";
 import { uploadAndMintAndRegister } from "../functions/story/uploadAndMintAndRegister";
 
 export async function remixExecution(
@@ -136,7 +136,7 @@ export async function remixExecution(
         iconURL: member.displayAvatarURL(),
       })
       .setTitle("File Registered Successfully")
-      .setURL(`https://explorer.story.foundation/ipa/${ipId}`)
+      .setURL(`${storyExplorer}/ipa/${ipId}`)
       .setDescription("Your file has been successfully registered on Story.")
       .addFields(fields)
       .setTimestamp()

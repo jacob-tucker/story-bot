@@ -9,6 +9,6 @@ export const adminAccount: Account = privateKeyToAccount(privateKey);
 const config: StoryConfig = {
   transport: http(rpcProviderUrl),
   account: adminAccount, // the account object from above
-  chainId: "sepolia",
+  chainId: "iliad",
 };
 export const adminClient = StoryClient.newClient(config);

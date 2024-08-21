@@ -18,11 +18,11 @@ const command = {
     .setType(ApplicationCommandType.Message),
 
   async execute(interaction: MessageContextMenuCommandInteraction) {
-    await interaction.reply({
-      content: "This command is coming soon... Shhhh :)",
-      ephemeral: true,
-    });
-    return;
+    // await interaction.reply({
+    //   content: "This command is coming soon... Shhhh :)",
+    //   ephemeral: true,
+    // });
+    // return;
     const message = interaction.targetMessage;
 
     if (!message.attachments.size) {

@@ -4,7 +4,7 @@ import {
   EmbedBuilder,
   MessageContextMenuCommandInteraction,
 } from "discord.js";
-import { storyLogo } from "../lib/utils/constants";
+import { storyExplorer, storyLogo } from "../lib/utils/constants";
 import { fetchDiscordUser } from "../lib/functions/fetchDiscordUser";
 import { fetchUserDiscordWallet } from "../lib/functions/supabase/fetchUserDiscordWallet";
 import { fetchDiscordImageArrayBuffer } from "../lib/functions/fetchDiscordImageArrayBuffer";
@@ -53,7 +53,7 @@ const command = {
       let fields = [
         {
           name: "Explorer",
-          value: `[View Data](https://explorer.story.foundation/ipa/${imageData.ip_id})`,
+          value: `[View Data](${storyExplorer}/ipa/${imageData.ip_id})`,
           inline: true,
         },
         {
