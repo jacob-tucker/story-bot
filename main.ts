@@ -96,8 +96,8 @@ client.on("messageReactionAdd", async (reaction, user) => {
       try {
         await member.roles.add(ROLE_ID);
         // Optional: Send a DM to the user or a follow-up message in the channel if needed
-        await user.send({
-          content: `Congratulations! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
+        await reaction.message.channel.send({
+          content: `Congratulations <@${user.id}>! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
         });
       } catch (e) {
         console.log(e);
