@@ -8,6 +8,7 @@ const command: Command = {
     .setName("reverse")
     .setDescription("JZ Uno Reverse."),
   async execute(interaction: CommandInteraction) {
+    await interaction.deferReply({ ephemeral: false });
     const filePath = path.join(__dirname, "..", "static", "jz-reverse.png");
     const attachment = new AttachmentBuilder(filePath);
 

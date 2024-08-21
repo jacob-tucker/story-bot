@@ -48,10 +48,11 @@ const command: Command = {
         )
     ) as SlashCommandBuilder,
   async execute(interaction: CommandInteraction) {
-    await interaction.editReply({
+    await interaction.reply({
       content: "This command is coming soon... Shhhh :)",
     });
     return;
+    await interaction.deferReply({ ephemeral: true });
     // @ts-ignore
     const subcommand = interaction.options.getSubcommand();
     if (subcommand === "ai") {
