@@ -18,26 +18,23 @@ const command = {
     .setType(ApplicationCommandType.Message),
 
   async execute(interaction: MessageContextMenuCommandInteraction) {
-    await interaction.reply({
+    await interaction.editReply({
       content: "This command is coming soon... Shhhh :)",
-      ephemeral: true,
     });
     return;
     const message = interaction.targetMessage;
 
     if (!message.attachments.size) {
-      await interaction.reply({
+      await interaction.editReply({
         content: "This message has no attachments.",
-        ephemeral: true,
       });
       return;
     }
 
     const attachment = message.attachments.first(); // Get the first attachment (assuming it's an image)
     if (!attachment || !attachment.contentType?.startsWith("image/")) {
-      await interaction.reply({
+      await interaction.editReply({
         content: "The selected message does not contain an image.",
-        ephemeral: true,
       });
       return;
     }
@@ -49,10 +46,9 @@ const command = {
     );
     const imageData = await fetchImageFromPHash(attachmentPHash);
     if (!imageData) {
-      await interaction.reply({
+      await interaction.editReply({
         content:
           "The original image is not registered on Story, so it cannot be remixed.",
-        ephemeral: true,
       });
       return;
     }

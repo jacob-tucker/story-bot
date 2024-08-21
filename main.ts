@@ -26,23 +26,21 @@ client.once("ready", () => {
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction) return;
-  console.log("[1] Breaking here...");
   if (interaction.isCommand()) {
+    await interaction.deferReply({ ephemeral: true });
     const command = client.commands.get(interaction.commandName);
-    console.log("[2] Breaking here...");
     if (!command) return;
 
     try {
-      console.log("[3] Breaking here...");
       await command.execute(interaction);
     } catch (error) {
       console.error(error);
-      await interaction.reply({
+      await interaction.editReply({
         content: "There was an error while executing this command!",
-        ephemeral: true,
       });
     }
   } else if (interaction.isModalSubmit()) {
+    await interaction.deferReply({ ephemeral: true });
     if (interaction.customId === "remixModal") {
       const name = interaction.fields.getTextInputValue("name");
       const prompt = interaction.fields.getTextInputValue("prompt");
@@ -50,10 +48,9 @@ client.on("interactionCreate", async (interaction) => {
       const strength = parseInt(strengthInput, 10);
       // Validate that the strength is a number and within the range [0, 100]
       if (isNaN(strength) || strength < 0 || strength > 100) {
-        await interaction.reply({
+        await interaction.editReply({
           content:
             "Invalid strength value. Please enter a number between 0 and 100.",
-          ephemeral: true,
         });
         return;
       }
@@ -62,9 +59,8 @@ client.on("interactionCreate", async (interaction) => {
       const attachmentUrl = modalStorage.get(interaction.user.id);
 
       if (!attachmentUrl) {
-        await interaction.reply({
+        await interaction.editReply({
           content: "Failed to retrieve image data. Please try again.",
-          ephemeral: true,
         });
         return;
       }

@@ -22,8 +22,6 @@ const command = {
     .setName("View IP")
     .setType(ApplicationCommandType.Message),
   async execute(interaction: MessageContextMenuCommandInteraction) {
-    await interaction.deferReply({ ephemeral: true });
-
     const message = interaction.targetMessage;
 
     // Checking if the message has attachments
