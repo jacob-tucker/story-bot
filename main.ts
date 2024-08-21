@@ -25,12 +25,15 @@ client.once("ready", () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
+  if (!interaction) return;
+  console.log("[1] Breaking here...");
   if (interaction.isCommand()) {
     const command = client.commands.get(interaction.commandName);
-
+    console.log("[2] Breaking here...");
     if (!command) return;
 
     try {
+      console.log("[3] Breaking here...");
       await command.execute(interaction);
     } catch (error) {
       console.error(error);
