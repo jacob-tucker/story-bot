@@ -78,8 +78,9 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 const TARGET_EMOJI_ID = "1275837340673380414"; // Replace with the emoji you want to listen for
-const TARGET_MESSAGE_ID = "1275838112681169037";
+const TARGET_MESSAGE_ID = "1275786846160293899";
 const ROLE_ID = "1265879282140577823";
+const TARGET_CHANNEL_ID = "1266597892077129801";
 
 client.on("messageReactionAdd", async (reaction, user) => {
   // Ignore bot reactions
@@ -96,9 +97,14 @@ client.on("messageReactionAdd", async (reaction, user) => {
       try {
         await member.roles.add(ROLE_ID);
         // Optional: Send a DM to the user or a follow-up message in the channel if needed
-        await reaction.message.channel.send({
-          content: `Congratulations <@${user.id}>! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
-        });
+        const targetChannel = guild.channels.cache.get(TARGET_CHANNEL_ID);
+        if (targetChannel && targetChannel.isTextBased()) {
+          await targetChannel.send({
+            content: `Congratulations <@${user.id}>! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
+          });
+        } else {
+          console.log(`Channel with ID ${TARGET_CHANNEL_ID} not found`);
+        }
       } catch (e) {
         console.log(e);
       }
