@@ -97,14 +97,14 @@ client.on("messageReactionAdd", async (reaction, user) => {
       try {
         await member.roles.add(ROLE_ID);
         // Optional: Send a DM to the user or a follow-up message in the channel if needed
-        const targetChannel = guild.channels.cache.get(TARGET_CHANNEL_ID);
-        if (targetChannel && targetChannel.isTextBased()) {
-          await targetChannel.send({
-            content: `Congratulations <@${user.id}>! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
-          });
-        } else {
-          console.log(`Channel with ID ${TARGET_CHANNEL_ID} not found`);
-        }
+        // const targetChannel = guild.channels.cache.get(TARGET_CHANNEL_ID);
+        // if (targetChannel && targetChannel.isTextBased()) {
+        //   await targetChannel.send({
+        //     content: `Congratulations <@${user.id}>! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
+        //   });
+        // } else {
+        //   console.log(`Channel with ID ${TARGET_CHANNEL_ID} not found`);
+        // }
       } catch (e) {
         console.log(e);
       }
