@@ -10,6 +10,7 @@ const command: Command = {
   async execute(interaction: CommandInteraction) {
     await interaction.reply({
       content: "You don't have to type this anymore :)",
+      ephemeral: true,
     });
     return;
     await interaction.deferReply({ ephemeral: false });
