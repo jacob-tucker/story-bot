@@ -9,7 +9,7 @@ export async function fetchDiscordUser(
     const guild = await client.guilds.fetch(guildId);
 
     // Fetch the member object for the user in that guild
-    const member = await guild.members.fetch(userId);
+    const member = await guild.members.fetch({ user: userId, force: true });
     return member;
   } catch (e) {
     return null;
