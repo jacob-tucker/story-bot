@@ -78,7 +78,7 @@ client.on("interactionCreate", async (interaction) => {
 });
 
 const TARGET_EMOJI_ID = "1275837340673380414"; // Replace with the emoji you want to listen for
-const TARGET_MESSAGE_ID = "1276626255352959098";
+const TARGET_MESSAGE_ID = "1278014543536324631";
 const ROLE_ID = "1265879282140577823";
 const TARGET_CHANNEL_ID = "1266597892077129801";
 
