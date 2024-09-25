@@ -105,8 +105,8 @@ client.on("messageReactionAdd", async (reaction, user) => {
 client.on("messageCreate", async (message) => {
   if (message.channelId === TARGET_CHANNEL_ID) {
     try {
-      await message.react("🔔");
       await message.react("🔕");
+      await message.react("🔔");
     } catch (error) {
       console.error("Failed to add reactions:", error);
     }
