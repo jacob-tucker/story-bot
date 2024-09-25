@@ -77,10 +77,8 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-const TARGET_EMOJI_ID = "1275837340673380414"; // Replace with the emoji you want to listen for
-const TARGET_MESSAGE_ID = "1278014543536324631";
-const ROLE_ID = "1265879282140577823";
-const TARGET_CHANNEL_ID = "1266597892077129801";
+const ROLE_ID = "1279408746141061142";
+const TARGET_CHANNEL_ID = "1230926987263082618";
 
 client.on("messageReactionAdd", async (reaction, user) => {
   // Ignore bot reactions
@@ -88,26 +86,29 @@ client.on("messageReactionAdd", async (reaction, user) => {
 
   // Check if the reaction emoji matches the target emoji
   if (
-    reaction.emoji.id === TARGET_EMOJI_ID &&
-    reaction.message.id === TARGET_MESSAGE_ID
+    (reaction.emoji.name === "🔔" || reaction.emoji.name === "🔕") &&
+    reaction.message.channelId === TARGET_CHANNEL_ID
   ) {
     const guild = reaction.message.guild; // Access the guild from the reaction message
     const member = await guild.members.fetch(user.id); // Fetch the member from the guild
-    if (!member.roles.cache.has(ROLE_ID)) {
-      try {
-        await member.roles.add(ROLE_ID);
-        // Optional: Send a DM to the user or a follow-up message in the channel if needed
-        // const targetChannel = guild.channels.cache.get(TARGET_CHANNEL_ID);
-        // if (targetChannel && targetChannel.isTextBased()) {
-        //   await targetChannel.send({
-        //     content: `Congratulations <@${user.id}>! You found the secret <@&${ROLE_ID}> role. Well done ;)`,
-        //   });
-        // } else {
-        //   console.log(`Channel with ID ${TARGET_CHANNEL_ID} not found`);
-        // }
-      } catch (e) {
-        console.log(e);
-      }
+
+    if (reaction.emoji.name === "🔔" && !member.roles.cache.has(ROLE_ID)) {
+      return await member.roles.add(ROLE_ID).catch((e) => console.log(e));
+    }
+    if (reaction.emoji.name === "🔕" && member.roles.cache.has(ROLE_ID)) {
+      return await member.roles.remove(ROLE_ID).catch((e) => console.log(e));
+    }
+  }
+});
+
+// Add reactions to new messages in the target channel
+client.on("messageCreate", async (message) => {
+  if (message.channelId === TARGET_CHANNEL_ID) {
+    try {
+      await message.react("🔔");
+      await message.react("🔕");
+    } catch (error) {
+      console.error("Failed to add reactions:", error);
     }
   }
 });

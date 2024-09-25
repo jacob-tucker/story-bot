@@ -17,7 +17,7 @@
   "dependencies": {
     "@onflow/fcl": "^1.6.0",
     "@pinata/sdk": "^2.1.0",
-    "@story-protocol/core-sdk": "^1.0.0-rc.14",
+    "@story-protocol/core-sdk": "^1.0.0-rc.22",
     "@supabase/supabase-js": "^2.38.4",
     "axios": "^1.7.3",
     "crypto": "^1.0.1",
