@@ -99,6 +99,17 @@ client.on("messageReactionAdd", async (reaction, user) => {
       return await member.roles.remove(ROLE_ID).catch((e) => console.log(e));
     }
   }
+
+  if (
+    reaction.emoji.id === "1275837340673380414" &&
+    reaction.message.channelId === "1266597892077129801"
+  ) {
+    const guild = reaction.message.guild; // Access the guild from the reaction message
+    const member = await guild.members.fetch(user.id); // Fetch the member from the guild
+    return await member.roles
+      .add("1265879282140577823")
+      .catch((e) => console.log(e));
+  }
 });
 
 // Add reactions to new messages in the target channel
