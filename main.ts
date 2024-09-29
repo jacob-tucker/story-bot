@@ -102,7 +102,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 
   if (
     reaction.emoji.id === "1275837340673380414" &&
-    reaction.message.channelId === "1266597892077129801"
+    reaction.message.channelId === "1134233250236211271"
   ) {
     const guild = reaction.message.guild; // Access the guild from the reaction message
     const member = await guild.members.fetch(user.id); // Fetch the member from the guild
