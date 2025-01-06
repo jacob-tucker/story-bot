@@ -1,10 +1,15 @@
-import { Collection } from "discord.js";
+import { Collection, EmbedBuilder } from "discord.js";
 import express from "express";
 import fs from "fs";
 import dotenv from "dotenv";
 import { client } from "./lib/bot";
 import { remixExecution } from "./lib/commands/remixExecution";
 import { modalStorage } from "./lib/database/storage";
+import { DEVELOPERS_ROLE_ID } from "./lib/utils/constants";
+import {
+  DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID,
+  DEVELOPER_CHAT_CHANNEL_ID,
+} from "./lib/utils/constants";
 dotenv.config();
 
 const app = express();
@@ -22,6 +27,39 @@ for (const file of commandFiles) {
 
 client.once("ready", () => {
   console.log("Story bot is online!");
+
+  // send a message every 12 hours in the developer chat
+  setInterval(async () => {
+    const channel = client.channels.cache.get(DEVELOPER_CHAT_CHANNEL_ID);
+    if (channel && channel.isTextBased()) {
+      try {
+        const embed = new EmbedBuilder()
+          .setTitle("Scheduled Message")
+          .setDescription(
+            `
+            This channel is for developer discussion ONLY. 
+            Any non-dev talk will result in a temporary mute in this Discord.\n
+            If you'd like to chat in this channel, go to the <#${DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID}> channel and receive the <@&${DEVELOPERS_ROLE_ID}> role.`
+          )
+          .setColor("#efebed")
+          .addFields([
+            {
+              name: "Documentation",
+              value: `[Go to Docs](https://docs.story.foundation)`,
+              inline: true,
+            },
+            {
+              name: "Block Explorer",
+              value: `[Go to Explorer](https://explorer.story.foundation)`,
+              inline: true,
+            },
+          ]);
+        await channel.send({ embeds: [embed] });
+      } catch (error) {
+        console.error("Failed to send scheduled message:", error);
+      }
+    }
+  }, 12 * 60 * 60 * 1000);
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -77,9 +115,6 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-const ROLE_ID = "1279408746141061142";
-const TARGET_CHANNEL_ID = "1230926987263082618";
-
 client.on("messageReactionAdd", async (reaction, user) => {
   // Ignore bot reactions
   if (user.bot) return;
@@ -87,34 +122,45 @@ client.on("messageReactionAdd", async (reaction, user) => {
   // Check if the reaction emoji matches the target emoji
   if (
     (reaction.emoji.name === "🔔" || reaction.emoji.name === "🔕") &&
-    reaction.message.channelId === TARGET_CHANNEL_ID
+    reaction.message.channelId === DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID
   ) {
     const guild = reaction.message.guild; // Access the guild from the reaction message
     const member = await guild.members.fetch(user.id); // Fetch the member from the guild
 
-    if (reaction.emoji.name === "🔔" && !member.roles.cache.has(ROLE_ID)) {
-      return await member.roles.add(ROLE_ID).catch((e) => console.log(e));
+    if (
+      reaction.emoji.name === "🔔" &&
+      !member.roles.cache.has(DEVELOPERS_ROLE_ID)
+    ) {
+      return await member.roles
+        .add(DEVELOPERS_ROLE_ID)
+        .catch((e) => console.log(e));
     }
-    if (reaction.emoji.name === "🔕" && member.roles.cache.has(ROLE_ID)) {
-      return await member.roles.remove(ROLE_ID).catch((e) => console.log(e));
+    if (
+      reaction.emoji.name === "🔕" &&
+      member.roles.cache.has(DEVELOPERS_ROLE_ID)
+    ) {
+      return await member.roles
+        .remove(DEVELOPERS_ROLE_ID)
+        .catch((e) => console.log(e));
     }
   }
 
-  if (
-    reaction.emoji.id === "1275837340673380414" &&
-    reaction.message.channelId === "1134233250236211271"
-  ) {
-    const guild = reaction.message.guild; // Access the guild from the reaction message
-    const member = await guild.members.fetch(user.id); // Fetch the member from the guild
-    return await member.roles
-      .add("1265879282140577823")
-      .catch((e) => console.log(e));
-  }
+  // uno reverse card
+  // if (
+  //   reaction.emoji.id === "1275837340673380414" &&
+  //   reaction.message.channelId === "1134233250236211271"
+  // ) {
+  //   const guild = reaction.message.guild; // Access the guild from the reaction message
+  //   const member = await guild.members.fetch(user.id); // Fetch the member from the guild
+  //   return await member.roles
+  //     .add("1265879282140577823")
+  //     .catch((e) => console.log(e));
+  // }
 });
 
 // Add reactions to new messages in the target channel
 client.on("messageCreate", async (message) => {
-  if (message.channelId === TARGET_CHANNEL_ID) {
+  if (message.channelId === DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID) {
     try {
       await message.react("🔕");
       await message.react("🔔");
