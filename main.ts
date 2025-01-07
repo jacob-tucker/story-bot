@@ -36,10 +36,7 @@ client.once("ready", () => {
         const embed = new EmbedBuilder()
           .setTitle("Scheduled Message")
           .setDescription(
-            `
-            This channel is for developer discussion ONLY. 
-            Any non-dev talk will result in a temporary mute in this Discord.\n
-            If you'd like to chat in this channel, go to the <#${DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID}> channel and receive the <@&${DEVELOPERS_ROLE_ID}> role.`
+            `This channel is for developer discussion ONLY. Any non-dev talk will result in a temporary mute in this Discord.\nIf you'd like to chat in this channel, go to the <#${DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID}> channel and receive the <@&${DEVELOPERS_ROLE_ID}> role.`
           )
           .setColor("#efebed")
           .addFields([
