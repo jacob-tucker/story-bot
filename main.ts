@@ -56,7 +56,7 @@ client.once("ready", () => {
         console.error("Failed to send scheduled message:", error);
       }
     }
-  }, 12 * 60 * 60 * 1000);
+  }, 48 * 60 * 60 * 1000);
 });
 
 client.on("interactionCreate", async (interaction) => {
