@@ -12,5 +12,6 @@ export const DEVELOPER_ANNOUNCEMENTS_CHANNEL_ID = "1230926987263082618";
 export const DEVELOPER_CHAT_CHANNEL_ID = "1325926057483964489";
 
 // Notification role IDs
-export const SDK_NOTIFICATIONS_ROLE_ID = "1354097896747958322"; // Using developers role temporarily, replace with actual SDK notifications role ID
-export const PROTOCOL_NOTIFICATIONS_ROLE_ID = "1354097972165480489"; // Using developers role temporarily, replace with actual Protocol notifications role ID
+export const SDK_NOTIFICATIONS_ROLE_ID = "1354097896747958322";
+export const PROTOCOL_NOTIFICATIONS_ROLE_ID = "1354097972165480489";
+export const SURREAL_WORLD_ASSETS_ROLE_ID = "1372574869774139492";
