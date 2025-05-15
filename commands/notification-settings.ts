@@ -41,7 +41,7 @@ const command: Command = {
           name: "🏗️ Surreal World Assets",
           value:
             "Stay up to date with the current Surreal World assets buildathon.",
-          inline: true,
+          inline: false,
         }
       )
       .setTimestamp()

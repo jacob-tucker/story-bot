@@ -3,7 +3,11 @@ import express from "express";
 import fs from "fs";
 import dotenv from "dotenv";
 import { client } from "./lib/bot";
-import { handleSdkNotificationButton, handleProtocolNotificationButton } from "./lib/commands/notificationButtonsExecution";
+import {
+  handleSdkNotificationButton,
+  handleProtocolNotificationButton,
+  handleSurrealWorldAssetsButton,
+} from "./lib/commands/notificationButtonsExecution";
 dotenv.config();
 
 const app = express();
@@ -44,7 +48,7 @@ client.on("interactionCreate", async (interaction) => {
   // Handle button interactions
   if (interaction.isButton()) {
     const customId = interaction.customId;
-    
+
     try {
       // Route to the appropriate button handler
       switch (customId) {
@@ -54,6 +58,9 @@ client.on("interactionCreate", async (interaction) => {
         case "protocol_notifications":
           await handleProtocolNotificationButton(interaction);
           break;
+        case "surreal_world_assets":
+          await handleSurrealWorldAssetsButton(interaction);
+          break;
         default:
           console.log(`Unknown button interaction: ${customId}`);
       }
@@ -62,7 +69,7 @@ client.on("interactionCreate", async (interaction) => {
       if (!interaction.replied) {
         await interaction.reply({
           content: "There was an error processing your request.",
-          ephemeral: true
+          ephemeral: true,
         });
       }
     }
