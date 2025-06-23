@@ -36,12 +36,6 @@ const command: Command = {
           value:
             "Stay up to date with the latest protocol release notes, breaking changes, and updates.",
           inline: true,
-        },
-        {
-          name: "🏗️ Surreal World Assets",
-          value:
-            "Stay up to date with the current Surreal World assets buildathon.",
-          inline: false,
         }
       )
       .setTimestamp()
@@ -61,12 +55,7 @@ const command: Command = {
         .setCustomId("protocol_notifications")
         .setLabel("Protocol Notifications")
         .setStyle(ButtonStyle.Primary)
-        .setEmoji("⛓️"),
-      new ButtonBuilder()
-        .setCustomId("surreal_world_assets")
-        .setLabel("Surreal World Assets")
-        .setStyle(ButtonStyle.Primary)
-        .setEmoji("🏗️")
+        .setEmoji("⛓️")
     );
 
     // Send the embed with buttons

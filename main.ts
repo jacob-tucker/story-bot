@@ -6,7 +6,6 @@ import { client } from "./lib/bot";
 import {
   handleSdkNotificationButton,
   handleProtocolNotificationButton,
-  handleSurrealWorldAssetsButton,
 } from "./lib/commands/notificationButtonsExecution";
 dotenv.config();
 
@@ -57,9 +56,6 @@ client.on("interactionCreate", async (interaction) => {
           break;
         case "protocol_notifications":
           await handleProtocolNotificationButton(interaction);
-          break;
-        case "surreal_world_assets":
-          await handleSurrealWorldAssetsButton(interaction);
           break;
         default:
           console.log(`Unknown button interaction: ${customId}`);

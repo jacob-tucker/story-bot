@@ -2,7 +2,6 @@ import { ButtonInteraction } from "discord.js";
 import {
   SDK_NOTIFICATIONS_ROLE_ID,
   PROTOCOL_NOTIFICATIONS_ROLE_ID,
-  SURREAL_WORLD_ASSETS_ROLE_ID,
 } from "../utils/constants";
 import { toggleUserRole } from "../functions/discord/toggleUserRole";
 
@@ -117,70 +116,6 @@ export async function handleProtocolNotificationButton(
     );
   } catch (error) {
     console.error("Error handling Protocol notification button:", error);
-
-    // If there was an error, let the user know
-    if (!interaction.replied) {
-      await interaction.reply({
-        content:
-          "Sorry, there was an error processing your request. Please try again later.",
-        ephemeral: true,
-      });
-    } else {
-      await interaction.editReply({
-        content:
-          "Sorry, there was an error processing your request. Please try again later.",
-      });
-    }
-  }
-}
-
-/**
- * Handles the Surreal World Assets button interaction
- * @param interaction The button interaction
- */
-export async function handleSurrealWorldAssetsButton(
-  interaction: ButtonInteraction
-): Promise<void> {
-  try {
-    await interaction.deferReply({ ephemeral: true });
-
-    // Get the guild member who clicked the button
-    const member = interaction.guild?.members.cache.get(interaction.user.id);
-
-    if (!member) {
-      await interaction.editReply({
-        content:
-          "❌ Unable to find your user information. Please try again later.",
-      });
-      return;
-    }
-
-    // Toggle the Surreal World Assets role
-    const result = await toggleUserRole(member, SURREAL_WORLD_ASSETS_ROLE_ID);
-
-    if (result.success) {
-      if (result.added) {
-        await interaction.editReply({
-          content: `✅ You've successfully **subscribed** to Surreal World Assets! You'll receive updates about the current Surreal World assets buildathon.`,
-        });
-      } else if (result.removed) {
-        await interaction.editReply({
-          content: `✅ You've successfully **unsubscribed** from Surreal World Assets. You'll no longer receive Surreal World Assets updates.`,
-        });
-      }
-    } else {
-      await interaction.editReply({
-        content:
-          "❌ There was an error updating your notification preferences. Please try again later.",
-      });
-    }
-
-    // Log the action for tracking
-    console.log(
-      `User ${interaction.user.tag} (${interaction.user.id}) toggled Surreal World Assets`
-    );
-  } catch (error) {
-    console.error("Error handling Surreal World Assets button:", error);
 
     // If there was an error, let the user know
     if (!interaction.replied) {
